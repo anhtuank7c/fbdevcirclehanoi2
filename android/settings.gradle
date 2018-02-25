@@ -1,0 +1,3 @@
+rootProject.name = 'devcircle2'
+
+include ':app'
