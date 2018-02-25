@@ -5,7 +5,8 @@ import MyCustomModule from './components/MyCustomModule';
 type Props = {};
 export default class App extends Component<Props> {
   state = {
-    name: ''
+    name: '',
+    ping: 'ping'
   };
 
   render() {
@@ -19,6 +20,27 @@ export default class App extends Component<Props> {
             MyCustomModule.hello('Anh Tuan Nguyen', name =>
               this.setState({ name })
             )
+          }
+        />
+        <Button
+          title="Person info"
+          onPress={() =>
+            MyCustomModule.personInfo(
+              'Anh Tuan',
+              'Nguyen',
+              29,
+              300.012,
+              true,
+              data => console.log('data', data)
+            )
+          }
+        />
+        <Button
+          title="async/await"
+          onPress={() =>
+            MyCustomModule.pingPong(false)
+              .then(data => console.log('pong', data))
+              .catch(e => console.log('pong rejected', e))
           }
         />
       </View>

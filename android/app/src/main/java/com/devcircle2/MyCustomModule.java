@@ -57,16 +57,35 @@ public class MyCustomModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void personInfo(
             String firstName, String lastName, Integer age, Double salary,
-            Boolean gender, WritableArray options, Callback callback) {
+            Boolean gender, Callback callback) {
 
+        // create an object to return back JS
         WritableMap data= Arguments.createMap();
+
         data.putString("firstName", firstName);
         data.putString("lastName", lastName);
         data.putInt("age", age);
         data.putDouble("salary", salary);
-        data.putArray("options", options);
         data.putBoolean("gender", gender);
         data.putString("genderStr", gender ? "male" : "female");
+
+        // options
+        WritableArray options = Arguments.createArray();
+        options.pushString("One");
+        options.pushString("True");
+        options.pushString("Three");
+
+        // date
+        WritableMap date = Arguments.createMap();
+        date.putInt("Mon", 2);
+        date.putInt("Tue", 3);
+        date.putInt("Sat", 7);
+
+        // push date object to options array
+        options.pushMap(date);
+
+        // push options array into data object
+        data.putArray("options", options);
         callback.invoke(data);
     }
 
@@ -78,12 +97,16 @@ public class MyCustomModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void pingPong(Boolean signal, Promise promise) {
-        if(signal) {
+        try {
+            Log.i("signal", "value input is: " + signal );
+            if(!signal) {
+                throw new Exception("Signal is false");
+            }
             WritableMap data= Arguments.createMap();
             data.putString("signal", "Signal is true");
             promise.resolve(data);
-        } else {
-            promise.reject(new Exception("Signal is false"));
+        }catch(Exception e) {
+            promise.reject(e);
         }
     }
 
