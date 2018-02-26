@@ -31,6 +31,13 @@ export default class App extends Component<Props> {
               29,
               300.012,
               true,
+              [1, 'two', 'three'],
+              {
+                key: 'Key',
+                value: 'Value',
+                latitude: 21.001382,
+                longitude: 105.806933
+              },
               data => console.log('data', data)
             )
           }

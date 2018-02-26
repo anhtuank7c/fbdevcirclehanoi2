@@ -14,7 +14,7 @@ import java.util.List;
  * @email tuan@agiletech.vn
  * @website agiletech.vn
  * @version 1.0.0
- * @since 2/25/2018
+ * @since 02-25-2018
  */
 public class MyCustomModulePackage implements ReactPackage {
     @Override

@@ -10,16 +10,23 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.ArrayList;
 
 /**
  * @author Anh Tuan Nguyen
  * @email tuan@agiletech.vn
  * @website agiletech.vn
  * @version 1.0.0
- * @since 2/25/2018
+ * @since 02-25-2018
  */
 public class MyCustomModule extends ReactContextBaseJavaModule {
     public MyCustomModule(ReactApplicationContext reactContext) {
@@ -51,23 +58,32 @@ public class MyCustomModule extends ReactContextBaseJavaModule {
      * @param age Integer
      * @param salary Double
      * @param gender Boolean
-     * @param options WritableArray
+     * @param array ReadableArray
+     * @param object ReadableMap
      * @param callback Callback
      */
     @ReactMethod
     public void personInfo(
             String firstName, String lastName, Integer age, Double salary,
-            Boolean gender, Callback callback) {
-
+            Boolean gender, @Nullable ReadableArray array, @Nullable ReadableMap object, Callback callback) {
         // create an object to return back JS
         WritableMap data= Arguments.createMap();
-
         data.putString("firstName", firstName);
         data.putString("lastName", lastName);
         data.putInt("age", age);
         data.putDouble("salary", salary);
         data.putBoolean("gender", gender);
         data.putString("genderStr", gender ? "male" : "female");
+
+        // jData is nullable, we just ignore it if null
+        if(null != array) {
+            data.putArray("array", Utils.convertReadableArrayToWritableArray(array));
+        }
+
+        // obj is nullable
+        if(null != object) {
+            data.putMap("object", Utils.convertReadableMapToWritableMap(object));
+        }
 
         // options
         WritableArray options = Arguments.createArray();
@@ -141,4 +157,6 @@ public class MyCustomModule extends ReactContextBaseJavaModule {
         }
 
     }
+
+
 }
