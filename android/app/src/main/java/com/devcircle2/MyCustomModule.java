@@ -113,7 +113,7 @@ public class MyCustomModule extends ReactContextBaseJavaModule {
             if(!signal) {
                 throw new Exception("Signal is false");
             }
-            WritableMap data= Arguments.createMap();
+            WritableMap data = Arguments.createMap();
             data.putString("signal", "Signal is true");
             promise.resolve(data);
         }catch(Exception e) {
@@ -124,12 +124,14 @@ public class MyCustomModule extends ReactContextBaseJavaModule {
     /**
      * After register event
      * We trigger this function to demo how native call js method
-     * @param eventName
+     * @param name
      * @param details
      */
     @ReactMethod
-    public void addEvent(String eventName, @Nullable ReadableMap details) {
-        this.sendEvent(this.getReactApplicationContext(), eventName, Utils.convertReadableMapToWritableMap(details));
+    public void addEvent(String name, @Nullable ReadableMap details) {
+        WritableMap data = Utils.convertReadableMapToWritableMap(details);
+        data.putString("name", name);
+        this.sendEvent(this.getReactApplicationContext(), "addEvent", data);
     }
 
     /**
