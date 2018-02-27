@@ -75,12 +75,12 @@ public class MyCustomModule extends ReactContextBaseJavaModule {
         data.putBoolean("gender", gender);
         data.putString("genderStr", gender ? "male" : "female");
 
-        // jData is nullable, we just ignore it if null
+        // array is nullable, we just ignore it if null
         if(null != array) {
             data.putArray("array", Utils.convertReadableArrayToWritableArray(array));
         }
 
-        // obj is nullable
+        // object is nullable
         if(null != object) {
             data.putMap("object", Utils.convertReadableMapToWritableMap(object));
         }
