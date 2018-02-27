@@ -41,7 +41,7 @@ RCT_EXPORT_METHOD(pingPong:
   @try {
     NSNumber *val = signalHere ? @YES : @NO;
     NSLog(@"value input is: %@", val);
-    if(val == 0) {
+    if([val integerValue] == 0) {
       @throw [NSException exceptionWithName:@"SignalException" reason:@"Signal is false" userInfo:nil];
     }
     NSDictionary *data = @{@"signal": @"Signal is true"};

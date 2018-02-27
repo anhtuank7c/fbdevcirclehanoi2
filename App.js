@@ -45,7 +45,7 @@ export default class App extends Component<Props> {
         <Button
           title="async/await"
           onPress={() =>
-            MyCustomModule.pingPong(true)
+            MyCustomModule.pingPong(false)
               .then(data => console.log('pong', data))
               .catch(e => console.log('pong rejected', e))
           }
