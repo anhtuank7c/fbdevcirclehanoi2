@@ -8,7 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import <React/RCTBridgeModule.h>
+#import <React/RCTEventEmitter.h>
 
-@interface MyCustomModule : NSObject<RCTBridgeModule>
+/**
+ * Basic native module without support emit event, we just need NSObject<RCTBridgeModule>
+ * othercase we need RCTEventEmitter<RCTBridgeModule>
+ */
+@interface MyCustomModule: RCTEventEmitter<RCTBridgeModule>
 
 @end
