@@ -7,21 +7,11 @@
 //
 
 #import "MyCustomModule.h"
+#import <React/RCTConvert.h>
 
 @implementation MyCustomModule {
-  bool hasListeners;
+  BOOL hasListeners;
 }
-
-// override function to do something in case you want to use event emitter
-- (void)startObserving {
-  hasListeners = YES;
-}
-
-// override function to do something in case you want to use event emitter
-- (void)stopObserving {
-  hasListeners = NO;
-}
-
 
 RCT_EXPORT_MODULE();
 
@@ -53,8 +43,18 @@ RCT_EXPORT_METHOD(personInfo:
 
 #pragma mark - pingPong
 
-RCT_EXPORT_METHOD(pingPong:
-                  (BOOL *)signalHere
+// you guys can use RCT_EXPORT_METHOD, or RCT_REMAP_METHOD
+// RCT_EXPORT_METHOD: bridge modules can also define methods that are exported to JavaScript as NativeModules.ModuleName.methodName
+// RCT_REMAP_METHOD: similar to RCT_EXPORT_METHOD, but it sets the method name which is exported to the JS.
+
+//RCT_EXPORT_METHOD(pingPong:
+//                 (BOOL *)signalHere
+//                 delay:(nonnull NSNumber *)delay
+//                 resolve:(RCTPromiseResolveBlock)resolve
+//                 reject:(RCTPromiseRejectBlock)reject) {
+
+RCT_REMAP_METHOD(pingPong,
+                  signalHere:(BOOL *)signalHere
                   delay:(nonnull NSNumber *)delay
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
@@ -78,19 +78,39 @@ RCT_EXPORT_METHOD(pingPong:
     }
 }
 
+// override function to do something in case you want to use event emitter
+- (void)startObserving {
+  hasListeners = YES;
+}
+
+// override function to do something in case you want to use event emitter
+- (void)stopObserving {
+  hasListeners = NO;
+}
+
 /**
  * register event name
  * NOTE: Note that using events gives us no guarantees about execution time, as the event is handled on a separate thread
  * Events are powerful, because they allow us to change React Native components without needing a reference to them
  */
 - (NSArray<NSString *> *)supportedEvents {
-  return @[@"EventReminder"];
+  return @[@"addEvent"];
 }
 
-- (void)calendarEventReminderReceived:(NSNotification *)notification {
-//    [NSThread sleepForTimeInterval:5];
-  NSString *eventName = notification.userInfo[@"name"];
-  NSLog(@"EventReminder");
-  [self sendEventWithName:@"EventReminder" body:@{@"name": eventName}];
+#pragma mark - addEvent
+// I export this method to demo that native call js method via event
+// In fact, you will using event to process something like: update video progress etc...
+RCT_REMAP_METHOD(addEvent,
+                 name:(NSString *)name
+                 details:(NSDictionary *)details)
+{
+  if(hasListeners) {
+    NSString *location = [RCTConvert NSString:details[@"location"]];
+    NSString *time = [RCTConvert NSString:details[@"time"]];
+    [self sendEventWithName:@"addEvent" body:@{@"name": name, @"location": location, @"time": time}];
+  } else {
+    NSLog(@"You did not registered any event/listener");
+  }
 }
+
 @end

@@ -16,11 +16,6 @@ import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import java.util.ArrayList;
-
 /**
  * @author Anh Tuan Nguyen
  * @email tuan@agiletech.vn
@@ -112,8 +107,9 @@ public class MyCustomModule extends ReactContextBaseJavaModule {
      * @param promise Promise
      */
     @ReactMethod
-    public void pingPong(Boolean signal, Promise promise) {
+    public void pingPong(Boolean signal, Integer delay, Promise promise) {
         try {
+//            Thread.sleep(delay * 1000); //in millisecond
             Log.i("signal", "value input is: " + signal );
             if(!signal) {
                 throw new Exception("Signal is false");
@@ -128,16 +124,13 @@ public class MyCustomModule extends ReactContextBaseJavaModule {
 
     /**
      * After register event
-     * We trigger this function to do send event back to JavaScript
-     * @param count
+     * We trigger this function to demo how native call js method
      * @param eventName
-     * @param params
+     * @param details
      */
-    public void doSendEvent(Integer count, String eventName,@Nullable WritableMap params) {
-        do{
-            this.sendEvent(this.getReactApplicationContext(), eventName, params);
-            count--;
-        }while (count > 0);
+    @ReactMethod
+    public void addEvent(String eventName, @Nullable ReadableMap details) {
+        this.sendEvent(this.getReactApplicationContext(), eventName, Utils.convertReadableMapToWritableMap(details));
     }
 
     /**

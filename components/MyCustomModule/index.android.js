@@ -1,3 +1,3 @@
 import { NativeModules } from 'react-native';
 
-module.exports = NativeModules.MyCustomModule;
+export default { ...NativeModules.MyCustomModule };

@@ -21,19 +21,14 @@ export default class App extends Component<Props> {
     delay: '0'
   };
 
-  constructor(props) {
-    super(props);
-
+  componentDidMount() {
     this.subscription = myCustomModuleEmitter.addListener(
-      'EventReminder',
-      reminder =>
-        this.setState({ data: reminder.name }, () =>
-          console.log('event received')
-        )
+      'addEvent',
+      reminder => this.setState({ data: JSON.stringify(reminder) })
     );
   }
 
-  componentWillMount() {
+  componentWillUnmount() {
     this.subscription.remove();
   }
 
@@ -44,14 +39,13 @@ export default class App extends Component<Props> {
         <ScrollView
           style={{
             width: '100%',
-            flex: 0.5,
             backgroundColor: '#ccc',
             padding: 10
           }}
         >
           <Text style={styles.instructions}>{this.state.data}</Text>
         </ScrollView>
-        <View style={{ flex: 0.5 }}>
+        <View style={{ flex: 1 }}>
           <Button
             title="Say Hello"
             onPress={() =>
@@ -144,6 +138,15 @@ export default class App extends Component<Props> {
                 );
               console.log('3) after promise');
             }}
+          />
+          <Button
+            title="Add Event"
+            onPress={() =>
+              MyCustomModule.addEvent('addEvent', {
+                location: 'Up@Vpbank, 89 Lang Ha',
+                time: new Date().toISOString()
+              })
+            }
           />
         </View>
       </View>
