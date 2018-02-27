@@ -55,11 +55,9 @@ RCT_EXPORT_METHOD(personInfo:
 
 RCT_REMAP_METHOD(pingPong,
                   signalHere:(BOOL *)signalHere
-                  delay:(nonnull NSNumber *)delay
                   resolve:(RCTPromiseResolveBlock)resolve
                   reject:(RCTPromiseRejectBlock)reject) {
     @try {
-      [NSThread sleepForTimeInterval:[delay integerValue]];
       if(signalHere == NO) {
         @throw [NSException exceptionWithName:@"SignalException" reason:@"Signal is false" userInfo:nil];
       }

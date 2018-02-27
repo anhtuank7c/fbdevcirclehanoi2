@@ -107,9 +107,8 @@ public class MyCustomModule extends ReactContextBaseJavaModule {
      * @param promise Promise
      */
     @ReactMethod
-    public void pingPong(Boolean signal, Integer delay, Promise promise) {
+    public void pingPong(Boolean signal, Promise promise) {
         try {
-//            Thread.sleep(delay * 1000); //in millisecond
             Log.i("signal", "value input is: " + signal );
             if(!signal) {
                 throw new Exception("Signal is false");
