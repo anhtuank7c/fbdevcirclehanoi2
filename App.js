@@ -17,8 +17,7 @@ const myCustomModuleEmitter = new NativeEventEmitter(MyCustomModule);
 export default class App extends Component<Props> {
   state = {
     data: '',
-    ping: true,
-    delay: '0'
+    ping: true
   };
 
   componentDidMount() {
@@ -94,51 +93,25 @@ export default class App extends Component<Props> {
                 onValueChange={ping => this.setState({ ping })}
               />
             </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                marginLeft: 10
+            <Button
+              title="async/await"
+              onPress={() => {
+                console.log('1) before promise');
+                MyCustomModule.pingPong(this.state.ping)
+                  .then(data =>
+                    this.setState({ data: JSON.stringify(data) }, () =>
+                      console.log('2) promise resolved')
+                    )
+                  )
+                  .catch(data =>
+                    this.setState({ data: data.message }, () =>
+                      console.log('2) promise rejected')
+                    )
+                  );
+                console.log('3) after promise');
               }}
-            >
-              <Text>Delay(s): </Text>
-              <TextInput
-                placeholder="Time to delay execute promise"
-                value={this.state.delay}
-                onChangeText={delay => this.setState({ delay })}
-                underlineColorAndroid="transparent"
-                style={{
-                  height: 40,
-                  width: 40,
-                  backgroundColor: '#ccc',
-                  textAlign: 'center',
-                  marginLeft: 10
-                }}
-              />
-            </View>
+            />
           </View>
-          <Button
-            title="async/await"
-            onPress={() => {
-              console.log('1) before promise');
-              MyCustomModule.pingPong(
-                this.state.ping,
-                parseInt(this.state.delay)
-              )
-                .then(data =>
-                  this.setState({ data: JSON.stringify(data) }, () =>
-                    console.log('2) promise resolved')
-                  )
-                )
-                .catch(data =>
-                  this.setState({ data: data.message }, () =>
-                    console.log('2) promise rejected')
-                  )
-                );
-              console.log('3) after promise');
-            }}
-          />
           <Button
             title="Add Event"
             onPress={() =>
